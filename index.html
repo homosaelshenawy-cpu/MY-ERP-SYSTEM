@@ -2,158 +2,153 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Enterprise ERP | Professional View</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Odoo Community - Accounting</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --odoo-purple: #714B67; --odoo-teal: #00A09D; --bg-gray: #f0f2f5; --text: #4c4c4c; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-gray); margin: 0; display: flex; height: 100vh; color: var(--text); }
+        :root { --odoo-primary: #714B67; --odoo-secondary: #00A09D; --bg-view: #e9ecef; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg-view); margin: 0; display: flex; flex-direction: column; height: 100vh; }
         
-        /* Sidebar */
-        .sidebar { width: 70px; background: #4c4c4c; display: flex; flex-direction: column; align-items: center; padding-top: 20px; transition: 0.3s; }
-        .sidebar:hover { width: 200px; }
-        .nav-icon { color: white; padding: 15px; cursor: pointer; width: 100%; text-align: center; white-space: nowrap; overflow: hidden; }
-        .nav-icon:hover { background: var(--odoo-purple); }
-        .nav-icon span { display: none; margin-right: 10px; }
-        .sidebar:hover span { display: inline; }
+        /* Odoo Top Navbar */
+        .odoo-navbar { background: var(--odoo-primary); color: white; height: 45px; display: flex; align-items: center; padding: 0 15px; font-size: 14px; }
+        .nav-item { padding: 0 10px; cursor: pointer; opacity: 0.9; }
+        .nav-item:hover { opacity: 1; }
 
-        /* Main View */
-        .viewport { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .top-bar { height: 50px; background: white; border-bottom: 1px solid #ddd; display: flex; align-items: center; padding: 0 20px; font-weight: bold; color: var(--odoo-purple); }
-        
+        /* Sub-Header (Control Panel) */
+        .control-panel { background: white; border-bottom: 1px solid #ccc; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .breadcrumb { font-size: 18px; color: #666; }
+        .btn-primary { background: var(--odoo-primary); color: white; border: 1px solid var(--odoo-primary); padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        .btn-secondary { background: white; border: 1px solid #ccc; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+
+        /* Main View Container */
+        .odoo-content { flex: 1; overflow-y: auto; padding: 15px; }
+
         /* Kanban Dashboard */
-        .kanban-container { padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
-        .odoo-card { background: white; border-left: 5px solid var(--odoo-purple); border-radius: 3px; box-shadow: 0 2px 5px #ccc; padding: 15px; }
-        .card-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        
-        /* Accounting Form (Odoo Style) */
-        .odoo-form { background: white; margin: 20px; padding: 30px; border-radius: 3px; box-shadow: 0 2px 10px #ddd; flex: 1; overflow-y: auto; }
-        .form-header { border-bottom: 2px solid #eee; padding-bottom: 20px; margin-bottom: 20px; }
-        .odoo-table { width: 100%; border-collapse: collapse; }
-        .odoo-table th { background: #f8f9fa; border-bottom: 2px solid #dee2e6; padding: 10px; text-align: right; }
-        .odoo-table td { border-bottom: 1px solid #eee; padding: 8px; }
-        input[type="text"], input[type="number"], select { border: none; border-bottom: 1px solid #ccc; padding: 5px; width: 100%; outline: none; }
-        input:focus { border-bottom: 2px solid var(--odoo-teal); }
+        .kanban-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 10px; }
+        .kanban-card { background: white; border-left: 4px solid var(--odoo-primary); padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card-title { color: var(--odoo-primary); font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
 
-        .btn-odoo { background: var(--odoo-teal); color: white; border: none; padding: 8px 15px; border-radius: 3px; cursor: pointer; font-weight: bold; }
-        .btn-secondary { background: white; border: 1px solid #ccc; padding: 8px 15px; border-radius: 3px; cursor: pointer; }
-        
-        .total-box { float: left; width: 250px; margin-top: 20px; background: #f8f9fa; padding: 15px; }
-        .total-line { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        /* Journal Entry Table */
+        .odoo-table { width: 100%; border-collapse: collapse; background: white; font-size: 13px; }
+        .odoo-table th { background: #f8f9fa; border: 1px solid #dee2e6; padding: 8px; text-align: right; }
+        .odoo-table td { border: 1px solid #dee2e6; padding: 5px; }
+        .line-input { border: none; width: 100%; outline: none; background: transparent; }
+        .line-input:focus { background: #f1faff; border-bottom: 1px solid var(--odoo-secondary); }
+
+        .total-section { float: left; width: 300px; margin-top: 15px; }
+        .total-row { display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid #ddd; }
     </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="nav-icon" onclick="showTab('dash')"><i class="fas fa-th"></i> <span>الرئيسية</span></div>
-        <div class="nav-icon" onclick="showTab('accounting')"><i class="fas fa-calculator"></i> <span>المحاسبة</span></div>
-        <div class="nav-icon" onclick="showTab('trial')"><i class="fas fa-balance-scale"></i> <span>ميزان المراجعة</span></div>
-    </aside>
+    <nav class="odoo-navbar">
+        <div class="nav-item"><b>تطبيقات</b></div>
+        <div class="nav-item" onclick="view('dash')">الداشبورد</div>
+        <div class="nav-item" onclick="view('journal')">قيود اليومية</div>
+        <div class="nav-item">ميزان المراجعة</div>
+        <div class="nav-item">التقارير</div>
+    </nav>
 
-    <main class="viewport">
-        <div class="top-bar" id="page-title">لوحة التحكم المحاسبية</div>
+    <div class="control-panel">
+        <div class="breadcrumb" id="title">المحاسبة</div>
+        <div id="actions">
+            <button class="btn-primary" onclick="saveEntry()">حفظ</button>
+            <button class="btn-secondary" onclick="addLine()">إضافة سطر</button>
+        </div>
+    </div>
 
-        <section id="tab-dash" class="tab-content">
-            <div class="kanban-container">
-                <div class="odoo-card">
-                    <div class="card-header"><span>عملاء - فواتير</span> <i class="fas fa-ellipsis-v"></i></div>
-                    <div style="display:flex; justify-content: space-between;">
-                        <button class="btn-odoo">فاتورة جديدة</button>
-                        <div style="text-align:left"><small>بانتظار الدفع</small><br><b id="sales-sum">0.00 ج.م</b></div>
+    <div class="odoo-content">
+        <div id="view-dash" class="view">
+            <div class="kanban-grid">
+                <div class="kanban-card">
+                    <div class="card-title"><span>فواتير العملاء</span> <i class="fas fa-ellipsis-v"></i></div>
+                    <div style="display:flex; justify-content:space-between">
+                        <button class="btn-primary">فاتورة جديدة</button>
+                        <div style="text-align:left"><small>المبالغ المستحقة</small><br><b>0.00 ج.م</b></div>
                     </div>
                 </div>
-                <div class="odoo-card" style="border-left-color: var(--odoo-teal);">
-                    <div class="card-header"><span>البنك / الخزينة</span> <i class="fas fa-ellipsis-v"></i></div>
-                    <div style="display:flex; justify-content: space-between;">
+                <div class="kanban-card" style="border-left-color: var(--odoo-secondary)">
+                    <div class="card-title"><span>البنك</span> <i class="fas fa-ellipsis-v"></i></div>
+                    <div style="display:flex; justify-content:space-between">
                         <button class="btn-secondary">مطابقة</button>
-                        <div style="text-align:left"><small>الرصيد في أودو</small><br><b id="bank-sum">100,000.00 ج.م</b></div>
+                        <div style="text-align:left"><small>الرصيد الفعلي</small><br><b>100,000.00 ج.م</b></div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section id="tab-accounting" class="tab-content" style="display:none;">
-            <div class="odoo-form">
-                <div class="form-header">
-                    <button class="btn-odoo" onclick="saveEntry()">حفظ وتأكيد</button>
-                    <button class="btn-secondary" onclick="addLine()">إضافة سطر (Add a line)</button>
-                    <h2 style="margin-top:20px">قيد يومية جديد</h2>
-                    <div style="display:flex; gap:20px">
-                        <div>التاريخ: <input type="date" id="entry-date"></div>
-                        <div>المرجع: <input type="text" id="entry-ref" placeholder="مثلاً: INV/2024/001"></div>
-                    </div>
-                </div>
-
+        <div id="view-journal" class="view" style="display:none;">
+            <div style="background:white; padding:20px; border-radius:3px;">
+                <h3 style="color:var(--odoo-primary)">قيد يومية / جديد</h3>
                 <table class="odoo-table">
                     <thead>
                         <tr>
-                            <th width="40%">الحساب</th>
+                            <th>الحساب</th>
                             <th>البيان</th>
                             <th>مدين</th>
                             <th>دائن</th>
-                            <th width="5%"></th>
+                            <th width="30px"></th>
                         </tr>
                     </thead>
-                    <tbody id="entry-lines">
+                    <tbody id="lines-body">
                         </tbody>
                 </table>
-
-                <div class="total-box">
-                    <div class="total-line"><span>إجمالي المدين:</span> <span id="total-debit">0.00</span></div>
-                    <div class="total-line"><span>إجمالي الدائن:</span> <span id="total-credit">0.00</span></div>
-                    <div class="total-line" style="border-top:1px solid #ccc; font-weight:bold"><span>الفرق:</span> <span id="total-diff">0.00</span></div>
+                <div class="total-section">
+                    <div class="total-row"><span>إجمالي المدين:</span> <b id="total-d">0.00</b></div>
+                    <div class="total-row"><span>إجمالي الدائن:</span> <b id="total-c">0.00</b></div>
                 </div>
+                <div style="clear:both"></div>
             </div>
-        </section>
-    </main>
+        </div>
+    </div>
 
     <script>
-        const state = {
-            coa: {
-                "101": "نقدية", "102": "البنك", "201": "موردين", "401": "مبيعات", "501": "مصروفات"
-            },
-            journalEntries: []
+        // الـ Data Base المصغرة للـ COA
+        const coa = {
+            "101001": "البنك - عملة محلية",
+            "101002": "الخزينة",
+            "102001": "المخزون",
+            "401001": "إيرادات النشاط",
+            "501001": "مصروفات عامة"
         };
 
-        function showTab(id) {
-            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
-            document.getElementById('tab-' + id).style.display = 'block';
-            document.getElementById('page-title').innerText = (id === 'dash' ? 'لوحة التحكم' : 'دفتر القيود');
+        function view(v) {
+            document.querySelectorAll('.view').forEach(el => el.style.display = 'none');
+            document.getElementById('view-' + v).style.display = 'block';
+            document.getElementById('title').innerText = v === 'dash' ? 'المحاسبة' : 'قيود اليومية';
         }
 
         function addLine() {
-            const tbody = document.getElementById('entry-lines');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><select class="line-acc">${Object.entries(state.coa).map(([code, name]) => `<option value="${code}">${code} ${name}</option>`).join('')}</select></td>
-                <td><input type="text" class="line-desc"></td>
-                <td><input type="number" class="line-debit" value="0" onchange="calcTotals()"></td>
-                <td><input type="number" class="line-credit" value="0" onchange="calcTotals()"></td>
-                <td><i class="fas fa-trash" style="color:#ccc; cursor:pointer" onclick="this.parentElement.parentElement.remove(); calcTotals();"></i></td>
+            const tbody = document.getElementById('lines-body');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><select class="line-input">${Object.entries(coa).map(([k,v])=>`<option value="${k}">${k} ${v}</option>`).join('')}</select></td>
+                <td><input type="text" class="line-input" placeholder="شرح السطر"></td>
+                <td><input type="number" class="line-input d-val" value="0" onchange="sync()"></td>
+                <td><input type="number" class="line-input c-val" value="0" onchange="sync()"></td>
+                <td onclick="this.parentElement.remove();sync()"><i class="fas fa-trash" style="color:#ddd;cursor:pointer"></i></td>
             `;
-            tbody.appendChild(row);
+            tbody.appendChild(tr);
         }
 
-        function calcTotals() {
-            let d = 0, c = 0;
-            document.querySelectorAll('.line-debit').forEach(i => d += parseFloat(i.value || 0));
-            document.querySelectorAll('.line-credit').forEach(i => c += parseFloat(i.value || 0));
-            document.getElementById('total-debit').innerText = d.toFixed(2);
-            document.getElementById('total-credit').innerText = c.toFixed(2);
-            document.getElementById('total-diff').innerText = (d - c).toFixed(2);
+        function sync() {
+            let td = 0, tc = 0;
+            document.querySelectorAll('.d-val').forEach(i => td += parseFloat(i.value || 0));
+            document.querySelectorAll('.c-val').forEach(i => tc += parseFloat(i.value || 0));
+            document.getElementById('total-d').innerText = td.toFixed(2);
+            document.getElementById('total-c').innerText = tc.toFixed(2);
         }
 
         function saveEntry() {
-            const diff = parseFloat(document.getElementById('total-diff').innerText);
-            if (diff !== 0) {
-                alert("عفواً! القيد غير متوازن. يجب أن يتساوى المدين والدائن (نظام أودو)");
-                return;
+            const td = document.getElementById('total-d').innerText;
+            const tc = document.getElementById('total-c').innerText;
+            if (td !== tc || td === "0.00") {
+                alert("قيد غير متوازن! أودو لا يسمح بترحيل قيود غير متوازنة.");
+            } else {
+                alert("تم التأكيد والترحيل للأستاذ العام.");
             }
-            alert("تم تأكيد القيد وترحيله بنجاح!");
-            // هنا بنضيف الكود بتاع الترحيل الفعلي للـ Database
         }
 
-        // البداية بـ سطرين فاضيين زي أودو
+        // إنشاء سطرين تلقائياً عند الفتح
         window.onload = () => { addLine(); addLine(); };
     </script>
 </body>

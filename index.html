@@ -2,102 +2,73 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Odoo v19 | Accounting Enterprise</title>
+    <title>Odoo v19 Enterprise | Saudi Arabia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            /* Odoo v19 Official Color Palette */
             --o-v19-purple: #714B67;
             --o-v19-teal: #00A09D;
             --o-v19-bg: #f8f9fa;
-            --o-v19-card-bg: #ffffff;
             --o-v19-text: #111827;
             --o-v19-border: #e5e7eb;
-            --o-v19-accent: #eff6ff;
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0; background-color: var(--o-v19-bg); color: var(--o-v19-text);
             height: 100vh; display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* V19 Top Navigation - Floating Style */
+        /* Top Navbar */
         .o_navbar {
             background-color: var(--o-v19-purple); color: white; height: 50px;
             display: flex; align-items: center; padding: 0 20px; z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .o_app_switcher { font-size: 20px; cursor: pointer; margin-right: 10px; transition: 0.3s; }
-        .o_app_switcher:hover { transform: scale(1.1); }
-        .o_menu_brand { font-weight: 600; font-size: 19px; margin-left: 25px; cursor: pointer; }
+        .o_menu_brand { font-weight: 600; font-size: 19px; margin-left: 25px; }
         .o_nav_link { padding: 0 15px; cursor: pointer; height: 100%; display: flex; align-items: center; font-size: 14px; opacity: 0.85; }
-        .o_nav_link:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+        .o_nav_link:hover { background: rgba(255,255,255,0.1); opacity: 1; }
 
-        /* V19 Control Panel - Clean & Flat */
+        /* Control Panel */
         .o_control_panel {
             background: white; border-bottom: 1px solid var(--o-v19-border);
             padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
         }
-        .o_breadcrumb { font-size: 20px; font-weight: 500; display: flex; align-items: center; gap: 10px; color: #374151; }
-        .o_breadcrumb span:last-child { color: var(--o-v19-text); font-weight: 600; }
-
-        .o_cp_buttons { display: flex; gap: 8px; }
-        .btn {
-            border-radius: 6px; padding: 8px 16px; font-size: 14px; font-weight: 600;
-            cursor: pointer; border: 1px solid transparent; transition: all 0.2s;
-        }
+        .o_breadcrumb { font-size: 20px; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+        .btn { border-radius: 6px; padding: 8px 16px; font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid transparent; }
         .btn-primary { background: var(--o-v19-purple); color: white; }
-        .btn-primary:hover { background: #5d3d55; box-shadow: 0 2px 6px rgba(113, 75, 103, 0.3); }
         .btn-secondary { background: white; border-color: var(--o-v19-border); color: var(--o-v19-purple); }
 
-        /* Search Bar v19 - Command Palette Style */
-        .o_searchview {
-            background: var(--o-v19-bg); border: 1px solid var(--o-v19-border);
-            border-radius: 8px; padding: 6px 15px; width: 450px; display: flex; align-items: center;
-        }
-        .o_searchview input { background: transparent; border: none; outline: none; flex: 1; font-size: 14px; padding-right: 10px; }
-
-        /* Main Workspace */
+        /* Form Sheet */
         .o_content { flex: 1; overflow-y: auto; padding: 20px; }
-
-        /* V19 Form Sheet - The "Floating Paper" Effect */
         .o_form_sheet {
             background: white; border: 1px solid var(--o-v19-border);
             width: 100%; max-width: 1200px; margin: 0 auto; border-radius: 12px;
-            padding: 40px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            padding: 40px; box-shadow: 0 10px 15px rgba(0,0,0,0.05);
         }
 
-        /* Status Header v19 */
+        /* Statusbar */
         .o_form_statusbar {
             margin: -40px -40px 30px -40px; padding: 12px 40px;
             border-bottom: 1px solid var(--o-v19-border); display: flex;
             justify-content: space-between; align-items: center; background: #fafafa;
             border-radius: 12px 12px 0 0;
         }
-        .o_status_indicators { display: flex; border-radius: 6px; overflow: hidden; border: 1px solid var(--o-v19-border); }
-        .o_status_step { padding: 6px 20px; font-size: 12px; font-weight: bold; background: white; color: #9ca3af; position: relative; }
+        .o_status_step { padding: 6px 20px; font-size: 12px; font-weight: bold; background: white; color: #9ca3af; border: 1px solid var(--o-v19-border); margin-left: -1px; }
         .o_status_step.active { background: var(--o-v19-purple); color: white; }
 
-        /* V19 Fields Grid */
+        /* Fields Grid */
         .o_inner_group { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-bottom: 30px; }
         .o_cell { display: flex; align-items: center; margin-bottom: 15px; }
-        .o_label { width: 140px; font-size: 13px; font-weight: 600; color: #6b7280; }
-        .o_input { border: none; border-bottom: 1px solid var(--o-v19-border); flex: 1; padding: 4px 0; outline: none; font-size: 15px; font-weight: 500; transition: 0.3s; }
-        .o_input:focus { border-bottom: 2px solid var(--o-v19-teal); }
+        .o_label { width: 150px; font-size: 13px; font-weight: 600; color: #6b7280; }
+        .o_input { border: none; border-bottom: 1px solid var(--o-v19-border); flex: 1; padding: 4px 0; outline: none; font-size: 15px; }
 
-        /* Notebook v19 (Table) */
-        .o_notebook { margin-top: 40px; }
-        .o_notebook_headers { border-bottom: 2px solid var(--o-v19-border); display: flex; gap: 30px; margin-bottom: 15px; }
-        .o_tab { padding: 10px 5px; cursor: pointer; font-weight: 600; font-size: 14px; color: #6b7280; border-bottom: 3px solid transparent; }
-        .o_tab.active { color: var(--o-v19-purple); border-bottom-color: var(--o-v19-purple); }
-
-        .o_list_table { width: 100%; border-collapse: collapse; }
-        .o_list_table th { text-align: right; padding: 12px; font-size: 13px; color: #374151; border-bottom: 2px solid var(--o-v19-border); }
+        /* Notebook Table */
+        .o_list_table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .o_list_table th { text-align: right; padding: 12px; font-size: 13px; border-bottom: 2px solid var(--o-v19-border); }
         .o_list_table td { padding: 10px; border-bottom: 1px solid var(--o-v19-border); }
 
-        /* Floating Summary */
-        .o_group_totals { float: left; width: 350px; margin-top: 30px; background: var(--o-v19-accent); padding: 20px; border-radius: 8px; }
+        /* Totals - Saudi VAT Style */
+        .o_group_totals { float: left; width: 350px; margin-top: 30px; background: #f9fafb; padding: 20px; border-radius: 8px; }
         .total_line { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
         .total_grand { font-size: 20px; font-weight: 800; border-top: 2px solid #cbd5e1; padding-top: 10px; color: var(--o-v19-purple); }
     </style>
@@ -105,124 +76,38 @@
 <body>
 
     <nav class="o_navbar">
-        <i class="fas fa-th-large o_app_switcher"></i>
-        <div class="o_menu_brand">المحاسبة <span style="font-weight:300; font-size:14px; margin-right:5px">v19 Enterprise</span></div>
-        <div class="o_nav_link">الداشبورد</div>
+        <i class="fas fa-th-large" style="margin-right:10px"></i>
+        <div class="o_menu_brand">المحاسبة <span style="font-weight:300; font-size:12px;">المملكة العربية السعودية</span></div>
         <div class="o_nav_link">العملاء</div>
-        <div class="o_nav_link">المحاسبة</div>
-        <div class="o_nav_link">الإعدادات</div>
+        <div class="o_nav_link">الموردين</div>
+        <div class="o_nav_link">الضريبة</div>
     </nav>
 
     <div class="o_control_panel">
         <div class="o_breadcrumb">
-            <span style="color: var(--o-v19-purple); cursor:pointer">قيود اليومية</span>
+            <span style="color: var(--o-v19-purple)">فواتير العملاء</span>
             <i class="fas fa-chevron-left" style="font-size:12px; color:#ccc"></i>
-            <span>MISC/2026/0001</span>
+            <span>جديد</span>
         </div>
-        
-        <div class="o_searchview">
-            <i class="fas fa-search" style="color:#9ca3af"></i>
-            <input type="text" placeholder="ابحث عن قيود، حسابات، أو شركاء (ALT+K)">
-            <i class="fas fa-cog" style="color:#9ca3af; cursor:pointer"></i>
-        </div>
-
         <div class="o_cp_buttons">
             <button class="btn btn-primary" onclick="postEntry()">حفظ وتأكيد</button>
-            <button class="btn btn-secondary">إلغاء</button>
+            <button class="btn btn-secondary">طباعة فاتورة ضريبية</button>
         </div>
     </div>
 
     <div class="o_content">
         <div class="o_form_sheet">
             <div class="o_form_statusbar">
-                <div class="o_cp_buttons">
-                    <button class="btn btn-secondary">إرسال بالبريد</button>
-                    <button class="btn btn-secondary">تسجيل دفع</button>
-                </div>
-                <div class="o_status_indicators">
+                <button class="btn btn-secondary">إرسال للمراجعة</button>
+                <div style="display:flex">
                     <div class="o_status_step active">مسودة</div>
+                    <div class="o_status_step">مؤكد</div>
                     <div class="o_status_step">مرحل</div>
-                    <div class="o_status_step">مدفوع</div>
                 </div>
             </div>
 
-            <div style="margin-bottom: 40px;">
-                <h1 style="font-size: 32px; margin: 0; letter-spacing: -1px;">Draft Journal Entry</h1>
-            </div>
+            <h1 style="font-size: 28px; margin-bottom: 30px;">فاتورة ضريبية مبسطة</h1>
 
             <div class="o_inner_group">
                 <div>
-                    <div class="o_cell"><span class="o_label">المرجع</span><input type="text" class="o_input" value="MISC/2026/0001"></div>
-                    <div class="o_cell"><span class="o_label">دفتر اليومية</span><select class="o_input"><option>عمليات متفرقة</option><option>البنك</option></select></div>
-                </div>
-                <div>
-                    <div class="o_cell"><span class="o_label">التاريخ</span><input type="date" class="o_input" value="2026-05-11"></div>
-                    <div class="o_cell"><span class="o_label">العملة</span><span class="o_input" style="border:none">EGP</span></div>
-                </div>
-            </div>
-
-            <div class="o_notebook">
-                <div class="o_notebook_headers">
-                    <div class="o_tab active">عناصر اليومية</div>
-                    <div class="o_tab">معلومات تكميلية</div>
-                </div>
-                <table class="o_list_table">
-                    <thead>
-                        <tr>
-                            <th>الحساب</th>
-                            <th>الشريك</th>
-                            <th>التسمية</th>
-                            <th>مدين</th>
-                            <th>دائن</th>
-                            <th width="30px"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="lines">
-                        </tbody>
-                </table>
-                <button style="border:none; background:none; color:var(--o-v19-teal); font-weight:700; cursor:pointer; margin-top:15px; font-size:14px;" onclick="addLine()">+ إضافة سطر (Add a line)</button>
-            </div>
-
-            <div class="o_group_totals">
-                <div class="total_line"><span>إجمالي المدين</span><span id="sum_d">0.00</span></div>
-                <div class="total_line"><span>إجمالي الدائن</span><span id="sum_c">0.00</span></div>
-                <div class="total_line total_grand"><span>المجموع المستحق</span><span id="sum_total">0.00</span></div>
-            </div>
-            <div style="clear:both"></div>
-        </div>
-    </div>
-
-    <script>
-        function addLine() {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><input type="text" placeholder="ابحث عن حساب..." style="font-weight:600"></td>
-                <td><input type="text" placeholder="العميل/المورد"></td>
-                <td><input type="text" placeholder="وصف العملية"></td>
-                <td><input type="number" class="d_val" value="0" onchange="calc()"></td>
-                <td><input type="number" class="c_val" value="0" onchange="calc()"></td>
-                <td><i class="fas fa-trash-alt" style="color:#d1d5db; cursor:pointer" onclick="this.parentElement.parentElement.remove();calc();"></i></td>
-            `;
-            document.getElementById('lines').appendChild(row);
-        }
-
-        function calc() {
-            let d = 0, c = 0;
-            document.querySelectorAll('.d_val').forEach(i => d += parseFloat(i.value || 0));
-            document.querySelectorAll('.c_val').forEach(i => c += parseFloat(i.value || 0));
-            document.getElementById('sum_d').innerText = d.toLocaleString('en-US', {minimumFractionDigits: 2});
-            document.getElementById('sum_c').innerText = c.toLocaleString('en-US', {minimumFractionDigits: 2});
-            document.getElementById('sum_total').innerText = d.toLocaleString('en-US', {minimumFractionDigits: 2});
-        }
-
-        function postEntry() {
-            const d = document.getElementById('sum_d').innerText;
-            const c = document.getElementById('sum_c').innerText;
-            if (d !== c || d === "0.00") alert("Error: The journal entry is not balanced!");
-            else alert("Posted successfully in Odoo v19 Engine!");
-        }
-
-        window.onload = () => { addLine(); addLine(); };
-    </script>
-</body>
-</html>
+                    <div class="o_cell"><span class="o_label">العميل</span><input type="text" class="o_input" placeholder="اخ

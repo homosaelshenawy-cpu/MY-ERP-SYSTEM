@@ -110,4 +110,81 @@
 
             <div class="o_inner_group">
                 <div>
-                    <div class="o_cell"><span class="o_label">العميل</span><input type="text" class="o_input" placeholder="اخ
+                    <div class="o_cell"><span class="o_label">العميل</span><input type="text" class="o_input" placeholder="اختر عميل..."></div>
+                    <div class="o_cell"><span class="o_label">الرقم الضريبي</span><input type="text" class="o_input" placeholder="3xxxxxxxxxxxxxx"></div>
+                </div>
+                <div>
+                    <div class="o_cell"><span class="o_label">تاريخ الفاتورة</span><input type="date" class="o_input"></div>
+                    <div class="o_cell"><span class="o_label">طريقة الدفع</span><select class="o_input"><option>نقداً</option><option>شبكة</option><option>تحويل بنكي</option></select></div>
+                </div>
+            </div>
+
+            <table class="o_list_table">
+                <thead>
+                    <tr>
+                        <th>المنتج</th>
+                        <th>الكمية</th>
+                        <th>السعر</th>
+                        <th>الضريبة</th>
+                        <th>المجموع (ر.س)</th>
+                        <th width="30px"></th>
+                    </tr>
+                </thead>
+                <tbody id="lines"></tbody>
+            </table>
+            <button style="border:none; background:none; color:var(--o-v19-teal); font-weight:700; cursor:pointer; margin-top:15px;" onclick="addLine()">+ إضافة صنف</button>
+
+            <div class="o_group_totals">
+                <div class="total_line"><span>المجموع غير شامل الضريبة</span><span id="subtotal">0.00</span></div>
+                <div class="total_line"><span>ضريبة القيمة المضافة (15%)</span><span id="vat">0.00</span></div>
+                <div class="total_line total_grand"><span>الإجمالي شامل الضريبة</span><span id="total_all">0.00 ر.س</span></div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+    </div>
+
+    <script>
+        function addLine() {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" class="o_input" placeholder="وصف المنتج"></td>
+                <td><input type="number" class="qty o_input" value="1" onchange="calc()"></td>
+                <td><input type="number" class="price o_input" value="0" onchange="calc()"></td>
+                <td><select class="tax o_input" onchange="calc()"><option value="0.15">15%</option><option value="0">0%</option></select></td>
+                <td class="line_total">0.00</td>
+                <td><i class="fas fa-trash" style="color:#ddd; cursor:pointer" onclick="this.parentElement.parentElement.remove();calc();"></i></td>
+            `;
+            document.getElementById('lines').appendChild(row);
+        }
+
+        function calc() {
+            let subtotal = 0;
+            let totalVat = 0;
+            
+            document.querySelectorAll('#lines tr').forEach(row => {
+                const qty = parseFloat(row.querySelector('.qty').value) || 0;
+                const price = parseFloat(row.querySelector('.price').value) || 0;
+                const taxRate = parseFloat(row.querySelector('.tax').value) || 0;
+                
+                const linePrice = qty * price;
+                const lineVat = linePrice * taxRate;
+                
+                row.querySelector('.line_total').innerText = (linePrice + lineVat).toFixed(2);
+                
+                subtotal += linePrice;
+                totalVat += lineVat;
+            });
+
+            document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+            document.getElementById('vat').innerText = totalVat.toFixed(2);
+            document.getElementById('total_all').innerText = (subtotal + totalVat).toFixed(2) + " ر.س";
+        }
+
+        function postEntry() {
+            alert("تم ترحيل الفاتورة الضريبية طبقاً لمعايير زاتكا (ZATCA)");
+        }
+
+        window.onload = addLine;
+    </script>
+</body>
+</html>

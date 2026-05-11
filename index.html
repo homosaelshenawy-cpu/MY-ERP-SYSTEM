@@ -2,151 +2,174 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Enterprise Pro ERP | النظام المتكامل</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-PRO ERP | النظام المتكامل</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --main-bg: #0f172a; --side-bg: #1e293b; --accent: #38bdf8; --text: #f1f5f9; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--main-bg); color: var(--text); margin: 0; display: flex; overflow: hidden; }
+        :root { --bg: #0f172a; --side: #1e293b; --accent: #38bdf8; --text: #f1f5f9; --success: #22c55e; --danger: #ef4444; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Sidebar */
-        .sidebar { width: 260px; background: var(--side-bg); height: 100vh; border-left: 1px solid #334155; display: flex; flex-direction: column; }
-        .logo { padding: 30px; font-size: 24px; font-weight: bold; color: var(--accent); border-bottom: 1px solid #334155; }
-        .nav-links { flex: 1; padding: 20px; }
-        .nav-item { display: flex; align-items: center; padding: 12px 15px; color: #94a3b8; text-decoration: none; border-radius: 8px; margin-bottom: 5px; cursor: pointer; transition: 0.3s; }
-        .nav-item:hover, .nav-item.active { background: var(--accent); color: var(--main-bg); font-weight: bold; }
-        .nav-item i { margin-left: 12px; width: 20px; }
+        /* Sidebar - Navigation */
+        .sidebar { width: 260px; background: var(--side); border-left: 1px solid #334155; display: flex; flex-direction: column; }
+        .sidebar-logo { padding: 25px; font-size: 22px; font-weight: bold; color: var(--accent); border-bottom: 1px solid #334155; }
+        .nav-link { padding: 15px 20px; color: #94a3b8; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { background: #334155; color: var(--accent); border-right: 4px solid var(--accent); }
 
-        /* Main View */
-        .viewport { flex: 1; height: 100vh; overflow-y: auto; padding: 30px; position: relative; }
-        .module-page { display: none; animation: fadeIn 0.4s; }
-        .module-page.active { display: block; }
-
-        /* Dashboard Cards */
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
-        .card { background: var(--side-bg); padding: 20px; border-radius: 12px; border: 1px solid #334155; }
-        .card h3 { margin: 0; font-size: 14px; color: #94a3b8; }
-        .card .amount { font-size: 26px; font-weight: bold; margin-top: 10px; }
-
-        /* Forms & Tables */
-        input, select { background: #0f172a; border: 1px solid #334155; color: white; padding: 10px; border-radius: 6px; margin: 5px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { background: #334155; padding: 12px; text-align: right; }
+        /* Main Area */
+        .viewport { flex: 1; padding: 30px; overflow-y: auto; background: radial-gradient(circle at top right, #1e293b, #0f172a); }
+        .card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); padding: 25px; border-radius: 15px; border: 1px solid #334155; margin-bottom: 25px; }
+        
+        /* Tables & Inputs */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background: #334155; color: var(--accent); padding: 12px; text-align: right; }
         td { padding: 12px; border-bottom: 1px solid #334155; }
-        .btn-action { background: var(--accent); color: var(--main-bg); border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        input, select { background: #0f172a; border: 1px solid #475569; color: white; padding: 10px; border-radius: 8px; margin: 5px; width: 150px; }
+        .btn-post { background: var(--accent); color: var(--bg); border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
     </style>
 </head>
 <body>
 
     <aside class="sidebar">
-        <div class="logo">EL-SHeNAWY ERP</div>
-        <nav class="nav-links">
-            <div class="nav-item active" onclick="showModule('dashboard')"><i class="fas fa-th-large"></i> لوحة التحكم</div>
-            <div class="nav-item" onclick="showModule('accounting')"><i class="fas fa-calculator"></i> الحسابات العامة</div>
-            <div class="nav-item" onclick="showModule('sales')"><i class="fas fa-shopping-cart"></i> المبيعات</div>
-            <div class="nav-item" onclick="showModule('inventory')"><i class="fas fa-boxes"></i> المخازن</div>
-            <div class="nav-item" onclick="showModule('reports')"><i class="fas fa-file-invoice"></i> القوائم المالية</div>
-        </nav>
+        <div class="sidebar-logo"><i class="fas fa-layer-group"></i> E-PRO ERP</div>
+        <div class="nav-link active" onclick="showTab('dash')"><i class="fas fa-home"></i> لوحة التحكم</div>
+        <div class="nav-link" onclick="showTab('accounting')"><i class="fas fa-calculator"></i> القيود المحاسبية</div>
+        <div class="nav-link" onclick="showTab('inventory')"><i class="fas fa-boxes"></i> المخازن</div>
+        <div class="nav-link" onclick="showTab('sales')"><i class="fas fa-cash-register"></i> المبيعات</div>
+        <div class="nav-link" onclick="showTab('reports')"><i class="fas fa-chart-line"></i> القوائم المالية</div>
     </aside>
 
     <main class="viewport">
-        <section id="dashboard" class="module-page active">
-            <h1>التحليلات المركزية</h1>
-            <div class="grid-3">
-                <div class="card"><h3>إجمالي الأصول (بنك + مخزن)</h3><div class="amount" id="total-assets">0.00</div></div>
-                <div class="card"><h3>إجمالي المبيعات</h3><div class="amount" id="total-sales-sum">0.00</div></div>
-                <div class="card"><h3>صافي الربح</h3><div class="amount" id="net-profit" style="color:#4ade80">0.00</div></div>
+        <section id="tab-dash" class="tab-content">
+            <h1>التحليل الاستراتيجي</h1>
+            <div class="stats-grid">
+                <div class="card"><h3>إجمالي الأصول</h3><h2 id="view-assets">0.00</h2></div>
+                <div class="card"><h3>إجمالي الالتزامات</h3><h2 id="view-liab">0.00</h2></div>
+                <div class="card"><h3>صافي الربح</h3><h2 id="view-profit" style="color:var(--success)">0.00</h2></div>
             </div>
-            <div class="card" style="height: 300px;">
-                <canvas id="mainChart"></canvas>
+            <div class="card"><canvas id="mainChart" height="100"></canvas></div>
+        </section>
+
+        <section id="tab-accounting" class="tab-content" style="display:none;">
+            <h1>دفتر القيود اليومية المركزي</h1>
+            <div class="card">
+                <h3>تسجيل قيد يدوي (Double Entry)</h3>
+                <input type="text" id="j-desc" placeholder="وصف العملية" style="width:300px">
+                <select id="j-debit-acc"></select>
+                <select id="j-credit-acc"></select>
+                <input type="number" id="j-amount" placeholder="المبلغ">
+                <button class="btn-post" onclick="erp.postManualEntry()">ترحيل القيد</button>
+            </div>
+            <div class="card">
+                <table>
+                    <thead><tr><th>التاريخ</th><th>البيان</th><th>مدين</th><th>دائن</th><th>المبلغ</th></tr></thead>
+                    <tbody id="journal-table"></tbody>
+                </table>
             </div>
         </section>
 
-        <section id="accounting" class="module-page">
-            <h1>دفتر القيود اليومية (Journal Entries)</h1>
+        <section id="tab-sales" class="tab-content" style="display:none;">
+            <h1>موديول المبيعات أوتوماتيك الربط</h1>
             <div class="card">
-                <h3>إضافة قيد يدوي</h3>
-                <input type="date" id="acc-date">
-                <input type="text" id="acc-desc" placeholder="شرح القيد">
-                <select id="acc-debit-acc"><option value="cash">الخزينة</option><option value="inventory">المخزون</option></select>
-                <input type="number" id="acc-amount" placeholder="المبلغ">
-                <button class="btn-action" onclick="accountingEngine.addManualEntry()">ترحيل القيد</button>
-            </div>
-            <table>
-                <thead><tr><th>التاريخ</th><th>البيان</th><th>مدين</th><th>دائن</th><th>المبلغ</th></tr></thead>
-                <tbody id="journal-body"></tbody>
-            </table>
-        </section>
-
-        <section id="sales" class="module-page">
-            <h1>نقطة المبيعات</h1>
-            <div class="card">
-                <h3>فاتورة مبيعات جديدة</h3>
-                <select id="sales-item"><option value="product1">منتج أ (سعر 100)</option></select>
-                <input type="number" id="sales-qty" placeholder="الكمية">
-                <button class="btn-action" onclick="accountingEngine.processSale()">اعتماد الفاتورة</button>
-                <p style="font-size: 12px; color: #94a3b8;">* الضغط هنا سيقوم بإنشاء قيد محاسبي تلقائي وخصم المخزن.</p>
+                <h3>فاتورة مبيعات سريعة</h3>
+                <input type="text" placeholder="اسم العميل">
+                <select id="s-product">
+                    <option value="1500">لابتوب (1500 ج.م)</option>
+                    <option value="200">ماوس (200 ج.م)</option>
+                </select>
+                <input type="number" id="s-qty" placeholder="الكمية">
+                <button class="btn-post" onclick="erp.processAutoSale()">إصدار فاتورة وترحيل القيود</button>
             </div>
         </section>
     </main>
 
     <script>
-        // --- المحرك المحاسبي (The Accounting Engine) ---
-        const accountingEngine = {
-            data: {
-                balance: 100000, // رصيد افتتاحي
-                inventoryValue: 0,
-                sales: [],
-                journal: []
+        // --- محرك الـ ERP الاحترافي (E-PRO Engine) ---
+        const erp = {
+            // شجرة الحسابات (COA)
+            coa: {
+                "101": { name: "الصندوق/البنك", type: "Asset", balance: 100000 },
+                "102": { name: "المخزون", type: "Asset", balance: 50000 },
+                "201": { name: "الموردين", type: "Liability", balance: 0 },
+                "401": { name: "المبيعات", type: "Revenue", balance: 0 },
+                "501": { name: "تكلفة المبيعات", type: "Expense", balance: 0 }
+            },
+            journal: JSON.parse(localStorage.getItem('erp_journal')) || [],
+
+            init() {
+                this.updateUI();
+                this.fillSelects();
             },
 
-            // دالة الترحيل التلقائي (الربط بين الموديولات)
-            postToJournal(date, desc, debit, credit, amount) {
-                this.data.journal.push({ date, desc, debit, credit, amount });
-                this.renderJournal();
-                this.updateDashboard();
+            fillSelects() {
+                let html = "";
+                for (let code in this.coa) html += `<option value="${code}">${this.coa[code].name}</option>`;
+                document.getElementById('j-debit-acc').innerHTML = html;
+                document.getElementById('j-credit-acc').innerHTML = html;
             },
 
-            processSale() {
-                const qty = document.getElementById('sales-qty').value;
-                const total = qty * 100; // سعر افتراضي
+            postEntry(desc, debitCode, creditCode, amount) {
+                if (amount <= 0) return;
+                // منطق أودو: القيد يغير في أرصدة الحسابات فوراً
+                this.coa[debitCode].balance += parseFloat(amount);
+                this.coa[creditCode].balance -= parseFloat(amount);
                 
-                // 1. قيد محاسبي تلقائي: من ح/ الخزينة إلى ح/ المبيعات
-                this.postToJournal(new Date().toLocaleDateString(), "فاتورة مبيعات رقم 101", "الخزينة", "المبيعات", total);
+                this.journal.unshift({
+                    date: new Date().toLocaleString('ar-EG'),
+                    desc,
+                    debit: this.coa[debitCode].name,
+                    credit: this.coa[creditCode].name,
+                    amount
+                });
                 
-                // 2. تحديث البيانات
-                this.data.balance += parseFloat(total);
-                alert("تمت البيعة وترحيل القيد المحاسبي وتحديث الميزانية!");
+                localStorage.setItem('erp_journal', JSON.stringify(this.journal));
+                this.updateUI();
             },
 
-            renderJournal() {
-                const body = document.getElementById('journal-body');
-                body.innerHTML = this.data.journal.map(j => `
-                    <tr><td>${j.date}</td><td>${j.desc}</td><td>${j.debit}</td><td>${j.credit}</td><td>${j.amount}</td></tr>
+            postManualEntry() {
+                const desc = document.getElementById('j-desc').value;
+                const d = document.getElementById('j-debit-acc').value;
+                const c = document.getElementById('j-credit-acc').value;
+                const a = document.getElementById('j-amount').value;
+                this.postEntry(desc, d, c, a);
+                alert("تم الترحيل للحسابات العامة");
+            },
+
+            processAutoSale() {
+                const price = document.getElementById('s-product').value;
+                const qty = document.getElementById('s-qty').value;
+                const total = price * qty;
+                
+                // الربط الأوتوماتيكي (قيد المبيعات)
+                this.postEntry(`بيع بضاعة أوتوماتيك`, "101", "401", total);
+                // (قيد المخزون - تبسيطاً)
+                this.postEntry(`تخفيض المخزون`, "501", "102", total * 0.7); 
+                
+                alert("تم: 1. إصدار الفاتورة | 2. ترحيل القيد | 3. خصم المخزن");
+            },
+
+            updateUI() {
+                const tbody = document.getElementById('journal-table');
+                tbody.innerHTML = this.journal.map(j => `
+                    <tr><td>${j.date}</td><td>${j.desc}</td><td style="color:var(--success)">${j.debit}</td><td style="color:var(--danger)">${j.credit}</td><td>${j.amount}</td></tr>
                 `).join('');
-            },
-
-            updateDashboard() {
-                document.getElementById('total-assets').innerText = this.data.balance + " ج.م";
-                // هنا بنحسب التحليلات أوتوماتيك
+                
+                document.getElementById('view-assets').innerText = (this.coa["101"].balance + this.coa["102"].balance).toLocaleString() + " ج.م";
+                document.getElementById('view-profit').innerText = (this.coa["401"].balance).toLocaleString() + " ج.م";
             }
         };
 
-        function showModule(modId) {
-            document.querySelectorAll('.module-page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(modId).classList.add('active');
+        function showTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            document.getElementById('tab-' + id).style.display = 'block';
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
             event.currentTarget.classList.add('active');
         }
 
-        // تشغيل الرسم البياني
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: { labels: ['يناير', 'فبراير', 'مارس'], datasets: [{ label: 'الأرباح', data: [1200, 1900, 3000], backgroundColor: '#38bdf8' }] }
-        });
+        erp.init();
     </script>
 </body>
 </html>
